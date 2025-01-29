@@ -9,6 +9,10 @@ import (
 
 func startRepl() {	
 	scanner := bufio.NewScanner(os.Stdin)	
+	cfg := Config {
+		Next: "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20",
+	}
+
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
@@ -21,7 +25,7 @@ func startRepl() {
 		// If input is a command call function belonging to it
 		commandName := words[0]
 		if command, exists := getCommands()[commandName]; exists {
-			err := command.callback()
+			err := command.callback(&cfg)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -40,7 +44,13 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name		string
 	description	string
-	callback	func() error
+	callback	func(cfg *Config) error
+}
+
+// Keeps track of location
+type Config struct {
+	Next 		string
+	Previous	string
 }
 
 // Available commands
@@ -55,6 +65,11 @@ func getCommands() map[string]cliCommand {
 			name: 			"exit",
 			description:	"Exit the Pokedex",
 			callback: 		commandExit,
-		},		
+		},
+		"map": {
+			name: 			"map",
+			description:	"Display next 20 locations",
+			callback: 		commandMap,
+		},
 	}
 }
