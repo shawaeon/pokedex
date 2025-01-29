@@ -9,8 +9,10 @@ import (
 
 func startRepl() {	
 	scanner := bufio.NewScanner(os.Stdin)	
+	startURL := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+	
 	cfg := Config {
-		Next: "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20",
+		Next: &startURL,
 	}
 
 	for {
@@ -49,8 +51,8 @@ type cliCommand struct {
 
 // Keeps track of location
 type Config struct {
-	Next 		string
-	Previous	string
+	Next 		*string
+	Previous	*string
 }
 
 // Available commands
@@ -70,6 +72,10 @@ func getCommands() map[string]cliCommand {
 			name: 			"map",
 			description:	"Display next 20 locations",
 			callback: 		commandMap,
+		},"mapb": {
+			name: 			"mapb",
+			description:	"Display previous 20 locations",
+			callback: 		commandMapBack,
 		},
 	}
 }
