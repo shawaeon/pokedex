@@ -4,37 +4,26 @@ import (
 	"fmt"
 )
 
-func commandMapBack(cfg *Config) error {
-	url := cfg.Previous	
-	if url == nil {
-		fmt.Println("You're on the first page")
-		return nil
-	} 
-
-	locations := Locations{}
-
-	err := getData(url, &locations)
-	if err != nil {
-		return err
-	}
-	
-	cfg.Previous = locations.Previous
-	cfg.Next = locations.Next
-
-	for i := 0; i < len(locations.Results); i++{
-		fmt.Println(locations.Results[i].Name)
-	}
-	return nil
-}
-
-// Prints next 20 locations from the API
-func commandMap(cfg *Config) error {
+func commandMapForward(cfg *Config) error {
 	url := cfg.Next
 	if url == nil {
 		fmt.Println("No more locations")
 		return nil
 	} 
-	
+	return commandMap(cfg, url)
+}
+
+func commandMapBack(cfg *Config) error {
+	url := cfg.Previous
+	if url == nil {
+		fmt.Println("No previous locations")
+		return nil
+	} 
+	return commandMap(cfg, url)
+}
+
+// Prints locations from the API
+func commandMap(cfg *Config, url *string) error {	
 	locations := Locations{}
 
 	err := getData(url, &locations)
@@ -45,8 +34,8 @@ func commandMap(cfg *Config) error {
 	cfg.Previous = locations.Previous
 	cfg.Next = locations.Next
 
-	for i := 0; i < len(locations.Results); i++{
-		fmt.Println(locations.Results[i].Name)
+	for _, location := range(locations.Results) {
+		fmt.Println(location.Name)
 	}
 	return nil
 }
