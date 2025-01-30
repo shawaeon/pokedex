@@ -16,10 +16,10 @@ type cacheEntry struct {
 	val			[]byte
 }
 
-func NewCache(intervalInSeconds int) *Cache {
+func NewCache(interval time.Duration) *Cache {
 	newCache := Cache {
 		entries:	map[string]cacheEntry{},
-		interval:	time.Duration(intervalInSeconds) * time.Second,
+		interval:	interval,
 		mu:			&sync.Mutex{},
 	}
 	go newCache.reapLoop()
@@ -41,10 +41,7 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	defer c.mu.Unlock()
 
 	entry, exists := c.entries[key]
-	if exists {
-		return entry.val, true
-	}
-	return nil, false		
+	return entry.val, exists	
 }
 
 // Deletes entries older than interval from cache
@@ -61,5 +58,4 @@ func (c *Cache) reapLoop() {
 		}
 		c.mu.Unlock()
 	}
-
 }

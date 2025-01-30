@@ -14,7 +14,7 @@ import (
 func startRepl() {	
 	scanner := bufio.NewScanner(os.Stdin)	
 	startURL := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
-	cacheInterval := 10
+	cacheInterval := 10 * time.Second
 	
 	cfg := Config {
 		apiClient: 	&http.Client{Timeout: 5 * time.Second},
@@ -57,7 +57,7 @@ type cliCommand struct {
 	callback	func(cfg *Config) error
 }
 
-// Keeps track of location
+// Location on the map, api client and cache
 type Config struct {	
 	apiClient	*http.Client
 	cache		*pokecache.Cache
