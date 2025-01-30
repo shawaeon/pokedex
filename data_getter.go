@@ -5,12 +5,21 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"pokedex/internal/pokecache"
 )
 
 // Gets data from the API and adds it to a struct
-func getData[T any](url *string, client *http.Client, dataStruct *T) error {
+func getData[T any](url *string, client *http.Client, cache *pokecache.Cache, dataStruct *T) error {
 	
-
+	// If data exists in cache use cached data
+	data, exists := cache.Get(*url)
+	if exists {
+		err := json.Unmarshal(data, dataStruct)
+		if err != nil {
+			return fmt.Errorf("error unmarshalling data: %w", err)
+		}
+		return nil
+	}
 
 	req, err := http.NewRequest("GET", *url, nil)
 	if err != nil {
@@ -23,10 +32,12 @@ func getData[T any](url *string, client *http.Client, dataStruct *T) error {
 	}
 	defer res.Body.Close()
 	
-	data, err := io.ReadAll(res.Body)
+	// Cache data
+	data, err = io.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("error reading data: %w", err)
 	}
+	cache.Add(*url, data)
 	
 	err = json.Unmarshal(data, dataStruct)
 	if err != nil {

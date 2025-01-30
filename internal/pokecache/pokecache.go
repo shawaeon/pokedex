@@ -18,13 +18,15 @@ type cacheEntry struct {
 
 func NewCache(intervalInSeconds int) *Cache {
 	newCache := Cache {
-		interval: time.Duration(intervalInSeconds) * time.Second,
+		entries:	map[string]cacheEntry{},
+		interval:	time.Duration(intervalInSeconds) * time.Second,
+		mu:			&sync.Mutex{},
 	}
-	newCache.reapLoop()
+	go newCache.reapLoop()
 	return &newCache 
 }
 
-func (c Cache) Add(key string, val []byte) {
+func (c *Cache) Add(key string, val []byte) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -34,7 +36,7 @@ func (c Cache) Add(key string, val []byte) {
 	}	
 }
 
-func (c Cache) Get(key string) ([]byte, bool) {
+func (c *Cache) Get(key string) ([]byte, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
@@ -45,8 +47,10 @@ func (c Cache) Get(key string) ([]byte, bool) {
 	return nil, false		
 }
 
-func (c Cache) reapLoop() {
+// Deletes entries older than interval from cache
+func (c *Cache) reapLoop() {
 	ticker := time.NewTicker(c.interval)
+	defer ticker.Stop()
 	for {
 		tickTime := <- ticker.C
 		c.mu.Lock()
