@@ -3,8 +3,10 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 func startRepl() {	
@@ -12,6 +14,7 @@ func startRepl() {
 	startURL := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
 	
 	cfg := Config {
+		apiClient: &http.Client{Timeout: 5 * time.Second},
 		Next: &startURL,
 	}
 
@@ -51,6 +54,7 @@ type cliCommand struct {
 
 // Keeps track of location
 type Config struct {
+	apiClient	*http.Client
 	Next 		*string
 	Previous	*string
 }

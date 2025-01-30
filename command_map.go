@@ -26,7 +26,7 @@ func commandMapBack(cfg *Config) error {
 func commandMap(cfg *Config, url *string) error {	
 	locations := Locations{}
 
-	err := getData(url, &locations)
+	err := getData(url, cfg.apiClient, &locations)
 	if err != nil {
 		return err
 	}
