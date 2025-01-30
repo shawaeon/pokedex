@@ -7,16 +7,21 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"pokedex/internal/pokecache"
 )
 
 func startRepl() {	
 	scanner := bufio.NewScanner(os.Stdin)	
 	startURL := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+	cacheInterval := 10
 	
 	cfg := Config {
-		apiClient: &http.Client{Timeout: 5 * time.Second},
-		Next: &startURL,
+		apiClient: 	&http.Client{Timeout: 5 * time.Second},
+		cache:		pokecache.NewCache(cacheInterval),
+		Next: 		&startURL,
 	}
+
 
 	for {
 		fmt.Print("Pokedex > ")
@@ -53,8 +58,9 @@ type cliCommand struct {
 }
 
 // Keeps track of location
-type Config struct {
+type Config struct {	
 	apiClient	*http.Client
+	cache		*pokecache.Cache
 	Next 		*string
 	Previous	*string
 }

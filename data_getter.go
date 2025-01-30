@@ -10,6 +10,8 @@ import (
 // Gets data from the API and adds it to a struct
 func getData[T any](url *string, client *http.Client, dataStruct *T) error {
 	
+
+
 	req, err := http.NewRequest("GET", *url, nil)
 	if err != nil {
 		return fmt.Errorf("error creating a request: %w", err)
