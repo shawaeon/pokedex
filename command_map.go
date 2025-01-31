@@ -5,7 +5,7 @@ import (
 	"pokedex/internal/pokeapi"
 )
 
-func commandMapForward(cfg *Config) error {
+func commandMapForward(cfg *Config, args ...string) error {
 	url := cfg.Next
 	if url == nil {
 		fmt.Println("No more locations")
@@ -14,7 +14,7 @@ func commandMapForward(cfg *Config) error {
 	return commandMap(cfg, url)
 }
 
-func commandMapBack(cfg *Config) error {
+func commandMapBack(cfg *Config, args ...string) error {
 	url := cfg.Previous
 	if url == nil {
 		fmt.Println("No previous locations")

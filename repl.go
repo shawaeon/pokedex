@@ -33,17 +33,17 @@ func startRepl() {
 			continue
 		}
 		// location for commandExplore
-		if len(words) > 1 {
-			cfg.optionalParam = words[1]
-		} else {
-			cfg.optionalParam = ""
-		}
 		
 
 		// If input is a command call function belonging to it
 		commandName := words[0]
 		if command, exists := getCommands()[commandName]; exists {
-			err := command.callback(&cfg)
+			var err error
+			if len(words) > 1 {
+				err = command.callback(&cfg, words[1])
+			} else{
+				err = command.callback(&cfg)
+			}
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -62,14 +62,13 @@ func cleanInput(text string) []string {
 type cliCommand struct {
 	name		string
 	description	string
-	callback	func(cfg *Config) error
+	callback	func(cfg *Config, args ...string) error
 }
 
 // Location on the map, api client and cache
 type Config struct {	
 	apiClient		*http.Client
 	cache			*pokecache.Cache
-	optionalParam	string	
 	Next 			*string
 	Previous		*string
 }

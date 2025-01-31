@@ -3,18 +3,23 @@ package main
 import (
 	"fmt"
 	"pokedex/internal/pokeapi"
+	"strings"
 )
 
-func commandExplore(cfg *Config) error {
-	if cfg.optionalParam == "" {
+func commandExplore(cfg *Config, args ...string) error {
+	if len(args) == 0 {
 		fmt.Println("Please input location to explore (f.ex. \"explore canalave-city-area\").")
 		return nil
 	}
-	url := fmt.Sprintf("%v/location-area/%s", pokeapi.BaseURL, cfg.optionalParam)
+	url := fmt.Sprintf("%v/location-area/%s", pokeapi.BaseURL, args[0])
 	location := Location{}
 
 	err:= pokeapi.GetData(&url, cfg.apiClient, cfg.cache, &location)
 	if err != nil {
+		if strings.Contains(err.Error(), "unmarshalling") {
+			fmt.Println("Invalid location")
+			return nil
+		}
 		return err
 	}	
 	fmt.Printf("Exploring %v\n", location.Location.Name)
