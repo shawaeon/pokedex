@@ -8,18 +8,19 @@ import (
 	"strings"
 	"time"
 
+	"pokedex/internal/pokeapi"
 	"pokedex/internal/pokecache"
 )
 
 func startRepl() {	
 	scanner := bufio.NewScanner(os.Stdin)	
-	startURL := "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+	startURL := pokeapi.BaseURL + "/location-area/?offset=0&limit=20"
 	cacheInterval := 10 * time.Second
 	
 	cfg := Config {
-		apiClient: 	&http.Client{Timeout: 5 * time.Second},
-		cache:		pokecache.NewCache(cacheInterval),
-		Next: 		&startURL,
+		apiClient: 		&http.Client{Timeout: 5 * time.Second},
+		cache:			pokecache.NewCache(cacheInterval),
+		Next: 			&startURL,
 	}
 
 
@@ -31,6 +32,13 @@ func startRepl() {
 		if len(words) == 0 {
 			continue
 		}
+		// location for commandExplore
+		if len(words) > 1 {
+			cfg.optionalParam = words[1]
+		} else {
+			cfg.optionalParam = ""
+		}
+		
 
 		// If input is a command call function belonging to it
 		commandName := words[0]
@@ -59,10 +67,11 @@ type cliCommand struct {
 
 // Location on the map, api client and cache
 type Config struct {	
-	apiClient	*http.Client
-	cache		*pokecache.Cache
-	Next 		*string
-	Previous	*string
+	apiClient		*http.Client
+	cache			*pokecache.Cache
+	optionalParam	string	
+	Next 			*string
+	Previous		*string
 }
 
 // Available commands
@@ -82,10 +91,16 @@ func getCommands() map[string]cliCommand {
 			name: 			"map",
 			description:	"Display next 20 locations",
 			callback: 		commandMapForward,
-		},"mapb": {
+		},
+		"mapb": {
 			name: 			"mapb",
 			description:	"Display previous 20 locations",
 			callback: 		commandMapBack,
+		},
+		"explore": {
+			name:			"explore <location>",
+			description: 	"Explore a location",
+			callback:		commandExplore,	
 		},
 	}
 }

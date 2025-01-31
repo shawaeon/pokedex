@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"pokedex/internal/pokeapi"
 )
 
 func commandMapForward(cfg *Config) error {
@@ -26,7 +27,7 @@ func commandMapBack(cfg *Config) error {
 func commandMap(cfg *Config, url *string) error {	
 	locations := Locations{}
 
-	err := getData(url, cfg.apiClient, cfg.cache, &locations)
+	err := pokeapi.GetData(url, cfg.apiClient, cfg.cache, &locations)
 	if err != nil {
 		return err
 	}

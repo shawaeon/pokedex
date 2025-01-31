@@ -1,4 +1,4 @@
-package main
+package pokeapi
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 )
 
 // Gets data from the API and adds it to a struct
-func getData[T any](url *string, client *http.Client, cache *pokecache.Cache, dataStruct *T) error {
+func GetData[T any](url *string, client *http.Client, cache *pokecache.Cache, dataStruct *T) error {
 	
 	// If data exists in cache use cached data
 	data, exists := cache.Get(*url)
