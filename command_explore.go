@@ -8,8 +8,7 @@ import (
 
 func commandExplore(cfg *Config, args ...string) error {
 	if len(args) == 0 {
-		fmt.Println("Please input location to explore (f.ex. \"explore canalave-city-area\").")
-		return nil
+		return fmt.Errorf("please input location to explore (f.ex. \"explore canalave-city-area\")")
 	}
 	url := fmt.Sprintf("%v/location-area/%s", pokeapi.BaseURL, args[0])
 	location := Location{}
@@ -17,8 +16,7 @@ func commandExplore(cfg *Config, args ...string) error {
 	err:= pokeapi.GetData(&url, cfg.apiClient, cfg.cache, &location)
 	if err != nil {
 		if strings.Contains(err.Error(), "unmarshalling") {
-			fmt.Println("Invalid location")
-			return nil
+			return fmt.Errorf("invalid location")
 		}
 		return err
 	}	
