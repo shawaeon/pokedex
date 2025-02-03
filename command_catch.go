@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"strings"
+
 	"pokedex/internal/pokeapi"
 	"pokedex/internal/pokeball"
-	"strings"
 )
 
 func commandCatch (cfg *Config, args ...string) error {
@@ -24,8 +26,17 @@ func commandCatch (cfg *Config, args ...string) error {
 		return err
 	}
 	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon.Name)
-	fmt.Printf("%s caught!\n", pokemon.Name)
-	cfg.pokeball.Add(pokemon.Name, pokemon)
-		
+	if tryCatch(pokemon){
+		fmt.Printf("%s was caught!\n", pokemon.Name)	
+		cfg.pokeball.Add(pokemon.Name, pokemon)
+		return nil
+	}
+	fmt.Printf("%s escaped!\n", pokemon.Name)
 	return nil
+}
+
+// Chance of catching pokemon based on its base experience
+func tryCatch (p pokeball.Pokemon) bool {
+	chance := 1.0 - (float64(p.BaseExperience) / 700.0)
+	return chance > rand.Float64()
 }

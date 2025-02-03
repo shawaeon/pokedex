@@ -4,6 +4,7 @@ import (
 	"sync"
 )
 
+// Caugh pokemon are stored here
 type Pokeball struct{
 	pokemon	map[string]Pokemon
 	mu 		*sync.Mutex
@@ -33,6 +34,13 @@ func (p *Pokeball) Get(key string) (Pokemon) {
 		return val
 	}
 	return Pokemon{}
+}
+
+func (p *Pokeball) GetAll() map[string]Pokemon{
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	return p.pokemon
 }
 
 
