@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"pokedex/internal/pokeapi"
+	"pokedex/internal/pokeball"
 	"pokedex/internal/pokecache"
 )
 
@@ -20,6 +21,7 @@ func startRepl() {
 	cfg := Config {
 		apiClient: 		&http.Client{Timeout: 5 * time.Second},
 		cache:			pokecache.NewCache(cacheInterval),
+		pokeball: 		pokeball.NewPokeball(),
 		Next: 			&startURL,
 	}
 
@@ -69,6 +71,7 @@ type cliCommand struct {
 type Config struct {	
 	apiClient		*http.Client
 	cache			*pokecache.Cache
+	pokeball		*pokeball.Pokeball
 	Next 			*string
 	Previous		*string
 }
