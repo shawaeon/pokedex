@@ -25,15 +25,15 @@ func (p *Pokeball) Add(key string, val Pokemon) {
 	p.pokemon[key] = val
 }
 
-func (p *Pokeball) Get(key string) (Pokemon) {
+func (p *Pokeball) Get(key string) (Pokemon, bool) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
 	val, exists := p.pokemon[key]
 	if exists {
-		return val
+		return val, true
 	}
-	return Pokemon{}
+	return Pokemon{}, false
 }
 
 func (p *Pokeball) GetAll() map[string]Pokemon{

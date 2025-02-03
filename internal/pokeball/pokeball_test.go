@@ -23,7 +23,10 @@ func TestAddGet(t *testing.T) {
 		t.Run(fmt.Sprintf("Test case %v", i), func(t *testing.T){
 			pokeball := NewPokeball()
 			pokeball.Add(c.key, c.val)
-			val := pokeball.Get(c.key)
+			val, exists := pokeball.Get(c.key)
+			if !exists {
+				t.Errorf("expected to find a key")
+			}
 			if val.Name != c.val.Name {
 				t.Errorf("expected to find a value")
 			}
