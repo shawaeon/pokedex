@@ -25,6 +25,7 @@ func startRepl() {
 		Next: 			&startURL,
 	}
 
+	commandHelp(&cfg)
 
 	for {
 		fmt.Print("Pokedex > ")
@@ -113,6 +114,11 @@ func getCommands() map[string]cliCommand {
 			name:			"inspect <pokemon>",
 			description:	"Get information about caught pokemon",
 			callback: 		commandInspect,	
+		},
+		"pokedex": {
+			name:			"pokedex",
+			description: 	"Display all caught pokemon",
+			callback: 		commandPokedex,
 		},
 	}
 }
