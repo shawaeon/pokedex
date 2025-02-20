@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"pokedex/internal/pokecache"
+
+	"github.com/shawaeon/pokedex/internal/pokecache"
 )
 
 // Gets data from the API and adds it to a struct

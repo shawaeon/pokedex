@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"pokedex/internal/pokeapi"
 	"strings"
+
+	"github.com/shawaeon/pokedex/internal/pokeapi"
 )
 
 func commandExplore(cfg *Config, args ...string) error {

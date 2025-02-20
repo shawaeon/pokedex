@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"pokedex/internal/pokeapi"
+
+	"github.com/shawaeon/pokedex/internal/pokeapi"
 )
 
 func commandMapForward(cfg *Config, args ...string) error {

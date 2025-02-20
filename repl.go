@@ -8,9 +8,9 @@ import (
 	"strings"
 	"time"
 
-	"pokedex/internal/pokeapi"
-	"pokedex/internal/pokeball"
-	"pokedex/internal/pokecache"
+	"github.com/shawaeon/pokedex/internal/pokeapi"
+	"github.com/shawaeon/pokedex/internal/pokeball"
+	"github.com/shawaeon/pokedex/internal/pokecache"
 )
 
 func startRepl() {	

@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"strings"
 
-	"pokedex/internal/pokeapi"
-	"pokedex/internal/pokeball"
+	"github.com/shawaeon/pokedex/internal/pokeapi"
+	"github.com/shawaeon/pokedex/internal/pokeball"
 )
 
 func commandCatch (cfg *Config, args ...string) error {
